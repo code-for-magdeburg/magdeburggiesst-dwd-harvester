@@ -10,6 +10,7 @@ on:
   push:
     branches:
       - master
+      - port-to-md
     paths:
       - harvester/*.py
       - harvester/Dockerfile

@@ -5,10 +5,12 @@ on:
     branches:
       - master
       - staging
+      - port-to-md
   pull_request:
     branches:
       - master
       - staging
+      - port-to-md
   workflow_dispatch:
 
 env:
@@ -39,6 +41,13 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version-file: ".nvmrc"
+      - name: Get the source for the api port-to-md
+        uses: actions/checkout@v3
+        if: github.event.pull_request.base.ref == 'port-to-md' || github.ref == 'refs/heads/port-to-md'
+        with:
+          repository: code-for-magdeburg/magdeburggiesst-postgres-api
+          path: api
+          ref: port-to-md
       - name: Get the source for the api staging
         uses: actions/checkout@v3
         if: github.event.pull_request.base.ref == 'staging' || github.ref == 'refs/heads/staging'
