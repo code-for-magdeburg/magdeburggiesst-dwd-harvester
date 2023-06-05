@@ -41,13 +41,13 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version-file: ".nvmrc"
-      - name: Get the source for the api port-to-md
+      - name: Get the source for the api master-magdeburg
         uses: actions/checkout@v3
         if: github.event.pull_request.base.ref == 'port-to-md' || github.ref == 'refs/heads/port-to-md'
         with:
           repository: code-for-magdeburg/magdeburggiesst-postgres-api
           path: api
-          ref: port-to-md
+          ref: master-magdeburg
       - name: Get the source for the api staging
         uses: actions/checkout@v3
         if: github.event.pull_request.base.ref == 'staging' || github.ref == 'refs/heads/staging'
