@@ -327,10 +327,9 @@ if len(filelist) > 0:
 
     # create a CSV with all trees (id, lat, lng, radolan_sum)
     with conn.cursor() as cur:
-        # WARNING: The db is still mislabeled lat <> lng
         cur.execute("SELECT trees.id, trees.lat, trees.lng, trees.radolan_sum, (date_part('year', CURRENT_DATE) - trees.pflanzjahr) as age FROM trees WHERE ST_CONTAINS(ST_SetSRID (( SELECT ST_EXTENT (geometry) FROM radolan_geometry), 4326), trees.geom)")
         trees = cur.fetchall()
-        trees_head = "id,lng,lat,radolan_sum,age"
+        trees_head = "id,lat,lng,radolan_sum,age"
         trees_csv = trees_head
         pLimit = math.ceil(len(trees) / 4)
         pCount = 0
