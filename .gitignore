@@ -195,10 +195,7 @@ override.tf.json
 # !example_override.tf
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 # example: *tfplan*
-terraform/rds/terraform.tfvars
-terraform/ecs-harvester/terraform.tfvars
-terraform/s3-bucket/terraform.tfvars
-terraform/.vscode/settings.json
+
 # Logs
 logs
 npm-debug.log*

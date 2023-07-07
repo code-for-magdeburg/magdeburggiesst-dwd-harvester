@@ -28,7 +28,6 @@ env:
   MAPBOXTILESET: "xyz"
   MAPBOXLAYERNAME: "abc"
   LOGGING: INFO
-  # DATABASE_URL: postgresql://fangorn:ent@localhost:5432/trees?schema=public
 
 jobs:
   test-harvest:
@@ -37,10 +36,6 @@ jobs:
     steps:
       - name: Get the source
         uses: actions/checkout@v3
-      - name: Use Node.js from .nvmrc
-        uses: actions/setup-node@v2
-        with:
-          node-version-file: ".nvmrc"
       - name: Get the source for the api master-magdeburg
         uses: actions/checkout@v3
         if: github.event.pull_request.base.ref == 'port-to-md' || github.ref == 'refs/heads/port-to-md'
@@ -69,28 +64,20 @@ jobs:
       - name: Start the api
         run: cd api && supabase start && cd ..
       - name: run the harvester
-        run: docker run --env PG_SERVER='0.0.0.0' --env PG_DB --env PG_PORT --env PG_USER --env PG_PASS --env SUPABASE_PROJECT_ID --env SUPABASE_ACCESS_TOKEN --env SUPABASE_BUCKET_NAME --env MAPBOXTOKEN --env MAPBOXUSERNAME --env LOGGING --env OUTPUT --network host code-for-magdeburg/magdeburggiesst-dwd-harvester:test
+        run: >
+          docker run --env PG_SERVER='0.0.0.0' \
+                     --env PG_DB \
+                     --env PG_PORT \
+                     --env PG_USER \
+                     --env PG_PASS \
+                     --env SUPABASE_PROJECT_ID \
+                     --env SUPABASE_ACCESS_TOKEN \
+                     --env SUPABASE_BUCKET_NAME \
+                     --env MAPBOXTOKEN \
+                     --env MAPBOXUSERNAME \
+                     --env LOGGING \
+                     --env OUTPUT \
+                     --network host \
+                     code-for-magdeburg/magdeburggiesst-dwd-harvester:test
       - name: stop the api
         run: cd api && supabase stop && cd ..
-  release:
-    name: semantic-release
-    needs: [test-harvest]
-    runs-on: ubuntu-latest
-    outputs:
-      new-release-published: ${{ steps.semantic-release.outputs.new_release_published }}
-      new-release-version: ${{ steps.semantic-release.outputs.new_release_version }}
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - run: npm ci
-      - id: semantic-release
-        uses: cycjimmy/semantic-release-action@v3
-        with:
-          semantic_version: 18
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
