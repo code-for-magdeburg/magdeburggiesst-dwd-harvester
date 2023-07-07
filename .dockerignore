@@ -30,7 +30,5 @@ sample.env
 .github
 .vscode
 dev-db
-terraform
-action.yml
 docker-build-and-push.sh
 docker-compose.yml
